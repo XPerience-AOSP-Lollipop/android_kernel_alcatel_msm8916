@@ -1,4 +1,4 @@
-/* Copyright (c) 2011-2016, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2011-2014, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -48,6 +48,10 @@ module_param(disable_restart_work, uint, S_IRUGO | S_IWUSR);
 
 static int enable_debug;
 module_param(enable_debug, int, S_IRUGO | S_IWUSR);
+
+#ifdef CONFIG_MSM_DLOAD_MODE
+char panic_subsystem[16];
+#endif /* CONFIG_MSM_DLOAD_MODE */
 
 /**
  * enum p_subsys_state - state of a subsystem (private)
@@ -790,26 +794,8 @@ static void subsystem_restart_wq_func(struct work_struct *work)
 		track = &dev->track;
 	}
 
-	/*
-	 * If a system reboot/shutdown is under way, ignore subsystem errors.
-	 * However, print a message so that we know that a subsystem behaved
-	 * unexpectedly here.
-	 */
-	if (system_state == SYSTEM_RESTART
-		|| system_state == SYSTEM_POWER_OFF) {
-		WARN(1, "SSR aborted: %s, system reboot/shutdown is under way\n",
-			desc->name);
-		return;
-	}
-
 	mutex_lock(&track->lock);
 	do_epoch_check(dev);
-
-	if (dev->track.state == SUBSYS_OFFLINE) {
-		mutex_unlock(&track->lock);
-		WARN(1, "SSR aborted: %s subsystem not online\n", desc->name);
-		return;
-	}
 
 	/*
 	 * It's necessary to take the registration lock because the subsystem
@@ -920,6 +906,12 @@ int subsystem_restart_dev(struct subsys_device *dev)
 
 	pr_info("Restart sequence requested for %s, restart_level = %s.\n",
 		name, restart_levels[dev->restart_level]);
+
+	/* FR-793575, save subsystem name */
+#ifdef CONFIG_MSM_DLOAD_MODE
+	memset(panic_subsystem, 0, sizeof(panic_subsystem));
+	memcpy(panic_subsystem, name, strlen(name));
+#endif /* CONFIG_MSM_DLOAD_MODE */
 
 	if (WARN(disable_restart_work == DISABLE_SSR,
 		"subsys-restart: Ignoring restart request for %s.\n", name)) {
@@ -1654,6 +1646,10 @@ static int __init subsys_restart_init(void)
 			&panic_nb);
 	if (ret)
 		goto err_soc;
+
+#ifdef CONFIG_MSM_DLOAD_MODE
+	sprintf(panic_subsystem, "%s", "unknown");
+#endif /* CONFIG_MSM_DLOAD_MODE */
 
 	return 0;
 

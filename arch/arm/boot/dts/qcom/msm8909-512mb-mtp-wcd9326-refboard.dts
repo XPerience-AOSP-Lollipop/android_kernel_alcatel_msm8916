@@ -31,7 +31,6 @@
 
 &soc {
 	sound-9335 {
-		qcom,msm-mbhc-hphl-swh = <0>;
 		qcom,audio-routing =
 			"AIF4 VI", "MCLK",
 			"RX_BIAS", "MCLK",
