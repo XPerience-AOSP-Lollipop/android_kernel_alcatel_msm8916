@@ -248,6 +248,7 @@ struct msm_fb_data_type {
 	u32 bl_min_lvl;
 	u32 unset_bl_level;
 	u32 bl_updated;
+	bool allow_bl_update;
 	#ifdef CONFIG_TCT_8X16_IDOL347
 	u32 bl_level_scaled;
 	#else
