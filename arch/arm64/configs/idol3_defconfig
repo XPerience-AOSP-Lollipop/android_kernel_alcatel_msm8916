@@ -920,7 +920,7 @@ CONFIG_NFC=y
 #
 # Near Field Communication (NFC) devices
 #
-CONFIG_BCM2079X_NFC=m
+CONFIG_BCM2079X_NFC=y
 # CONFIG_NFC_PN533 is not set
 CONFIG_NFC_QNCI=y
 # CONFIG_NFC_NQ is not set
