@@ -93,7 +93,7 @@ struct tsl2772_i2c_platform_data {
 	bool als_can_wake;
 	struct lux_segment *segment;
 	int segment_num;*/
-	uint8_t state_reg;  
+	uint8_t state_reg;
 	uint8_t ledctrl_reg;
 	uint8_t	wait_reg;	//wait time
 	uint8_t control_reg;
