@@ -90,8 +90,8 @@ void print_local_time_taos(char *param)
 #define CALI_EVERY_TIME
 #ifdef CALI_EVERY_TIME
 /* [BUFFIX]-Mod- by TCTNB.XQJ,PR-804886, 2014/10/23, p sensor debug*/
-#define TAOS_THD_H_OFFSET 300	// mod by ning.wei for opimize p-sensor pr743248 2014-08-21
-#define TAOS_THD_L_OFFSET 150	// mod by ning.wei for opimize p-sensor pr743248 2014-08-21
+#define TAOS_THD_H_OFFSET 60	// mod by ning.wei for opimize p-sensor pr743248 2014-08-21
+#define TAOS_THD_L_OFFSET 35	// mod by ning.wei for opimize p-sensor pr743248 2014-08-21
 /* [BUFFIX]-End-byTCTNB.XQJ*/
 #endif
 struct PS_CALI_DATA_STRUCT
